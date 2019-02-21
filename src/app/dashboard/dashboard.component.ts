@@ -13,6 +13,7 @@ declare var google: any;
 export class DashboardComponent implements OnInit {
 
   private dados: any;
+  private dados2: any;
 
   constructor(private dadosService: DadosService) { }
 
@@ -22,6 +23,12 @@ export class DashboardComponent implements OnInit {
         this.dados = dados;
         this.init();
     });
+
+    this.dadosService.ObterDados2().subscribe(
+      dados2 => {
+        this.dados2 = dados2;
+        this.init();
+      });
   }
 
   /**
@@ -51,7 +58,15 @@ export class DashboardComponent implements OnInit {
   	this.exibirBarChart();
   	this.exibirLineChart();
   	this.exibirColumnChart();
-  	this.exibirDonutChart();
+    this.exibirDonutChart();
+    this.exibirGeoChart();
+  }
+
+  exibirGeoChart(): void{
+    const el = document.getElementById('regions_div');
+    const chart = new google.visualization.GeoChart(el);
+
+    chart.draw(this.obterDataTable2(), this.obterOpcoes2());
   }
 
   /**
@@ -74,7 +89,7 @@ export class DashboardComponent implements OnInit {
   exibir3dPieChart(): void {
   	const el = document.getElementById('3d_pie_chart');
   	const chart = new google.visualization.PieChart(el);
-	const opcoes = this.obterOpcoes();
+	  const opcoes = this.obterOpcoes();
 
     opcoes['is3D'] = true;
     chart.draw(this.obterDataTable(), opcoes);
@@ -146,6 +161,16 @@ export class DashboardComponent implements OnInit {
     return data;
   }
 
+  obterDataTable2(): any {
+  	const data = new google.visualization.DataTable();
+
+    data.addColumn('string', 'País');
+    data.addColumn('number', 'Quantidade');
+    data.addRows(this.dados2);
+
+    return data;
+  }
+
   /**
    * Retorna as opções do gráfico, que incluem o título
    * e tamanho do gráfico.
@@ -156,6 +181,14 @@ export class DashboardComponent implements OnInit {
   	return {
     	'title': 'Quantidade de cadastros primeiro semestre',
         'width': 400,
+        'height': 300
+    };
+  }
+
+  obterOpcoes2(): any {
+  	return {
+    	'title': 'Teste para dados',
+        'width': 1200,
         'height': 300
     };
   }

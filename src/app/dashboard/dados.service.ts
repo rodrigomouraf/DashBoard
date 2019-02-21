@@ -15,6 +15,15 @@ export class DadosService {
       ['Junho', 27]
     ];
 
+    readonly dados2 = [
+      ['Germany', 200],
+      ['United States', 300],
+      ['Brazil', 400],
+      ['Canada', 500],
+      ['France', 600],
+      ['RU', 700]
+    ];
+
   constructor() { }
 
   /**
@@ -28,6 +37,13 @@ export class DadosService {
      return new Observable(observable => {
        observable.next(this.dados);
        observable.complete();
+     })
+   }
+
+   ObterDados2(): Observable<any> {
+     return new Observable(observable => {
+        observable.next(this.dados2);
+        observable.complete();
      })
    }
 }
